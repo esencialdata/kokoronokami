@@ -1,0 +1,345 @@
+/* Kokoro no Kami - Design System */
+
+:root {
+    /* Colors - Organic Paper Theme */
+    --bg-primary: #f9f7f2;
+    /* Creamy off-white */
+    --bg-secondary: #f4f1ea;
+    /* Slightly darker cream */
+    --bg-tertiary: #ebe7de;
+    /* Darker accent for cards */
+
+    --text-primary: #2c2c2c;
+    /* Soft charcoal */
+    --text-secondary: #5a5a5a;
+    /* Muted grey */
+    --text-accent: #8c7b5b;
+    /* Muted gold/olive */
+
+    --accent-color: #8c7b5b;
+    /* Earthy gold */
+    --accent-hover: #6d5f45;
+
+    --border-color: #dcd6cb;
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Lato', sans-serif;
+
+    /* Spacing */
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 3rem;
+    --spacing-xl: 5rem;
+
+    /* Transitions */
+    --transition-speed: 0.4s;
+}
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-primary);
+    background-image: url('../images/grain_bg_e85ef183-7588-48b6-b7ff-ba8528eed23b_copy_3.avif');
+    background-repeat: repeat;
+    background-attachment: fixed;
+    /* Keeps texture static while scrolling */
+    background-size: auto;
+    /* Use actual image size */
+    color: var(--text-primary);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition-speed);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+    border-radius: 4px;
+}
+
+/* Layout Utilities */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.section {
+    padding: var(--spacing-xl) 0;
+}
+
+.grid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Components */
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    font-family: var(--font-body);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+.btn:hover {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: #fff;
+    /* Ensure white text on hover for primary button */
+}
+
+/* Navigation */
+.navbar {
+    background-color: transparent;
+    /* Transparent to show texture */
+    padding: var(--spacing-lg) 0;
+    position: relative;
+    /* Not sticky for this design */
+    border-bottom: none;
+    box-shadow: none;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    /* Stack logo and nav */
+    gap: var(--spacing-md);
+}
+
+.logo {
+    display: block;
+    width: 180px;
+    /* Slightly larger */
+    height: auto;
+    margin-bottom: var(--spacing-sm);
+}
+
+.logo img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.nav-links a {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    /* More breathing room */
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--accent-color);
+}
+
+.mobile-menu-btn {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+/* Hero Section */
+.hero {
+    background-color: transparent;
+    padding: 8rem 0;
+    text-align: center;
+    background-image: none;
+    /* Remove old hero bg */
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+    font-weight: 400;
+    /* Lighter weight */
+    letter-spacing: -1px;
+}
+
+.hero .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg);
+    font-style: italic;
+}
+
+/* Cards */
+.card {
+    background-color: transparent;
+    /* Remove card bg */
+    border: none;
+    /* Remove border */
+    padding: 0;
+    transition: opacity var(--transition-speed);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.card:hover {
+    transform: none;
+    /* Remove lift */
+    opacity: 0.8;
+}
+
+.card-image {
+    width: 100%;
+    height: 350px;
+    /* Taller images */
+    object-fit: cover;
+    margin-bottom: var(--spacing-md);
+    border-radius: 0;
+    /* Sharp corners */
+    filter: sepia(20%);
+    /* Slight vintage feel */
+}
+
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.card-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+    max-width: 90%;
+    flex-grow: 1;
+}
+
+/* Footer */
+.footer {
+    background-color: transparent;
+    padding: var(--spacing-xl) 0;
+    margin-top: var(--spacing-xl);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-links {
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-links a {
+    margin: 0 var(--spacing-sm);
+    color: var(--text-secondary);
+}
+
+.footer-links a:hover {
+    color: var(--accent-color);
+}
+
+.copyright {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-secondary);
+        flex-direction: column;
+        padding: var(--spacing-md);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+}
