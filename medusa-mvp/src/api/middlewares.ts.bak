@@ -1,0 +1,34 @@
+import { defineMiddlewares } from "@medusajs/framework/http";
+
+export default defineMiddlewares({
+    routes: [
+        {
+            method: ["POST", "PUT"],
+            matcher: "/admin/**",
+            bodyParser: {
+                sizeLimit: "50mb",
+            },
+        },
+        {
+            method: ["POST", "PUT"],
+            matcher: "/store/**",
+            bodyParser: {
+                sizeLimit: "50mb",
+            },
+        },
+        {
+            method: ["POST", "PUT"],
+            matcher: "/admin/uploads",
+            bodyParser: {
+                sizeLimit: "50mb",
+            },
+        },
+        {
+            method: ["POST", "PUT"],
+            matcher: "/admin/uploads/protected",
+            bodyParser: {
+                sizeLimit: "50mb",
+            },
+        }
+    ],
+});

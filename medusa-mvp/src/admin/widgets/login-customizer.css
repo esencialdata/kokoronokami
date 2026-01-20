@@ -1,0 +1,33 @@
+/* SCOPED CSS FOR LOGIN PAGE ONLY */
+
+/* 1. Force dark mode background only on login page wrapper if possible */
+/* Note: :root changes affect everything. We move this style to targeted scope if possible or keep minimal. */
+div[data-testid="login-page"] {
+    background-color: #1c1c1f;
+}
+
+/* 2. Hide Medusa Logo (AvatarBox) strictly within login card */
+div[data-testid="login-card"]>div.flex.flex-col.items-center> :first-child:has(svg):not(.custom-branding) {
+    display: none !important;
+}
+
+/* 3. Hide Text strictly within login card */
+div[data-testid="login-card"]>div.flex.flex-col.items-center>div.mb-4.flex.flex-col.items-center {
+    display: none !important;
+}
+
+/* 4. Fallback for SVG hiding, strictly scoped */
+div[data-testid="login-card"]>div.flex.flex-col.items-center>svg {
+    display: none !important;
+}
+
+/* 5. Custom Branding container */
+.custom-branding {
+    display: flex !important;
+    width: 100%;
+}
+
+.custom-logo {
+    display: block !important;
+    z-index: 10;
+}
