@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
   title: {
     template: "%s | Kokoro No Kami",
-    default: "Esencial Commerce | Kokoro No Kami",
+    default: "Tienda Oficial | Kokoro No Kami",
   },
 }
 
