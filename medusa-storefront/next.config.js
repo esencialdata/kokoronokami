@@ -7,6 +7,26 @@ checkEnvVariables()
  */
 const S3_HOSTNAME = process.env.MEDUSA_CLOUD_S3_HOSTNAME
 const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
+const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
+
+const backendImagePattern = (() => {
+  if (!MEDUSA_BACKEND_URL) {
+    return []
+  }
+
+  try {
+    const parsed = new URL(MEDUSA_BACKEND_URL)
+    return [
+      {
+        protocol: parsed.protocol.replace(":", ""),
+        hostname: parsed.hostname,
+        pathname: "/static/**",
+      },
+    ]
+  } catch {
+    return []
+  }
+})()
 
 /**
  * @type {import('next').NextConfig}
@@ -46,6 +66,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "dummyimage.com",
       },
+      ...backendImagePattern,
       ...(S3_HOSTNAME && S3_PATHNAME
         ? [
           {
