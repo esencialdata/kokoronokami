@@ -21,7 +21,7 @@ const backendImagePattern = [
       return {
         protocol: parsed.protocol.replace(":", ""),
         hostname: parsed.hostname,
-        pathname: "/static/**",
+        pathname: "/**",
       }
     } catch {
       return null
