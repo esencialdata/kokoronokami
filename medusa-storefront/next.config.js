@@ -8,25 +8,26 @@ checkEnvVariables()
 const S3_HOSTNAME = process.env.MEDUSA_CLOUD_S3_HOSTNAME
 const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
+const NEXT_PUBLIC_MEDUSA_BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL
 
-const backendImagePattern = (() => {
-  if (!MEDUSA_BACKEND_URL) {
-    return []
-  }
-
-  try {
-    const parsed = new URL(MEDUSA_BACKEND_URL)
-    return [
-      {
+const backendImagePattern = [
+  MEDUSA_BACKEND_URL,
+  NEXT_PUBLIC_MEDUSA_BACKEND_URL,
+]
+  .filter(Boolean)
+  .map((url) => {
+    try {
+      const parsed = new URL(url)
+      return {
         protocol: parsed.protocol.replace(":", ""),
         hostname: parsed.hostname,
         pathname: "/static/**",
-      },
-    ]
-  } catch {
-    return []
-  }
-})()
+      }
+    } catch {
+      return null
+    }
+  })
+  .filter(Boolean)
 
 /**
  * @type {import('next').NextConfig}
