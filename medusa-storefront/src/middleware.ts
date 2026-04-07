@@ -14,49 +14,59 @@ async function getRegionMap(cacheId: string) {
   const { regionMap, regionMapUpdated } = regionMapCache
 
   if (!BACKEND_URL) {
-    throw new Error(
-      "Middleware.ts: Error fetching regions. Did you set up regions in your Medusa Admin and define a MEDUSA_BACKEND_URL environment variable? Note that the variable is no longer named NEXT_PUBLIC_MEDUSA_BACKEND_URL."
-    )
+    return regionMap
   }
 
   if (
     !regionMap.keys().next().value ||
     regionMapUpdated < Date.now() - 3600 * 1000
   ) {
-    // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
-    const { regions } = await fetch(`${BACKEND_URL}/store/regions`, {
-      headers: {
-        "x-publishable-api-key": PUBLISHABLE_API_KEY!,
-      },
-      next: {
-        revalidate: 3600,
-        tags: [`regions-${cacheId}`],
-      },
-      cache: "force-cache",
-    }).then(async (response) => {
-      const json = await response.json()
-
-      if (!response.ok) {
-        throw new Error(json.message)
+    try {
+      // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
+      const headers: Record<string, string> = {}
+      if (PUBLISHABLE_API_KEY) {
+        headers["x-publishable-api-key"] = PUBLISHABLE_API_KEY
       }
 
-      return json
-    })
-
-    if (!regions?.length) {
-      throw new Error(
-        "No regions found. Please set up regions in your Medusa Admin."
-      )
-    }
-
-    // Create a map of country codes to regions.
-    regions.forEach((region: HttpTypes.StoreRegion) => {
-      region.countries?.forEach((c) => {
-        regionMapCache.regionMap.set(c.iso_2 ?? "", region)
+      const response = await fetch(`${BACKEND_URL}/store/regions`, {
+        headers,
+        next: {
+          revalidate: 3600,
+          tags: [`regions-${cacheId}`],
+        },
+        cache: "force-cache",
       })
-    })
 
-    regionMapCache.regionMapUpdated = Date.now()
+      if (!response.ok) {
+        throw new Error(`Failed to fetch regions (${response.status})`)
+      }
+
+      const payload = await response.json()
+      const regions = payload?.regions as HttpTypes.StoreRegion[] | undefined
+
+      if (!regions?.length) {
+        throw new Error("No regions found in backend response")
+      }
+
+      // Create a map of country codes to regions.
+      regions.forEach((region: HttpTypes.StoreRegion) => {
+        region.countries?.forEach((c) => {
+          regionMapCache.regionMap.set(c.iso_2 ?? "", region)
+        })
+      })
+
+      regionMapCache.regionMapUpdated = Date.now()
+    } catch {
+      // Keep middleware alive even when backend is temporarily unavailable.
+      // We prefer serving/redirecting with a fallback country code over
+      // crashing the whole request with MIDDLEWARE_INVOCATION_FAILED.
+      if (!regionMapCache.regionMap.size && DEFAULT_REGION) {
+        regionMapCache.regionMap.set(
+          DEFAULT_REGION.toLowerCase(),
+          {} as HttpTypes.StoreRegion
+        )
+      }
+    }
   }
 
   return regionMapCache.regionMap
@@ -116,8 +126,8 @@ export async function middleware(request: NextRequest) {
 
   const countryCode = regionMap && (await getCountryCode(request, regionMap))
 
-  const urlHasCountryCode =
-    countryCode && request.nextUrl.pathname.split("/")[1].includes(countryCode)
+  const pathCountryCode = request.nextUrl.pathname.split("/")[1]?.toLowerCase()
+  const urlHasCountryCode = !!countryCode && pathCountryCode === countryCode
 
   // if one of the country codes is in the url and the cache id is set, return next
   if (urlHasCountryCode && cacheIdCookie) {
